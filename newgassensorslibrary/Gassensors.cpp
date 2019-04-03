@@ -84,37 +84,6 @@ int Gassensors::MQGetGasPercentage(float rs_ro_ratio, int gas_id )
         } 
       }
       break;
- 
-    case MQ3:
-      //Serial.print(F("calculating mq3 gases"));
-        if ( accuracy == 1 ) {
-        if ( gas_id == GAS_ALCOHOL && rs_ro_ratio<=2.31 && rs_ro_ratio>=0.113 ) {
-          return (pow(10, ((-1.487 * (log10(rs_ro_ratio))) - 0.401)));
-        }
-      }
-      break;
-
-    case MQ4:
-      //Serial.print(F("calculating mq4 gases"));
-               Serial.print("rs_ro_ratio:  ");                                                        //debug statements that display step by step calculation of ppm
-               Serial.println(rs_ro_ratio);
-        if ( accuracy == 1 ) {
-        if ( gas_id == GAS_METHANE && rs_ro_ratio<=1.76 && rs_ro_ratio>=0.43 ) {
-          return (pow(10, ((-2.849 * (log10(rs_ro_ratio))) + 2.997)));
-        }
-      }
-      break;
-
-    case MQ5:
-      //Serial.print(F("calculating mq5 gases"));
-               Serial.print("rs_ro_ratio:  ");                                                        //debug statements that display step by step calculation of ppm
-               Serial.println(rs_ro_ratio);
-        if ( accuracy == 1 ) {
-        if ( gas_id == GAS_LPG && rs_ro_ratio<=0.71 && rs_ro_ratio>=0.14) {
-          return (pow(10, ((-2.513 * (log10(rs_ro_ratio))) + 1.878)));
-        } 
-      }
-      break;
 
     case MQ6:
       //Serial.print(F("calculating mq6 gases"));
@@ -141,23 +110,6 @@ int Gassensors::MQGetGasPercentage(float rs_ro_ratio, int gas_id )
       if ( accuracy == 1 ) {
         if ( gas_id == GAS_HYDROGEN && rs_ro_ratio<=0.25 && rs_ro_ratio>=0.04) {
           return (pow(10, ((-2.568 * (log10(rs_ro_ratio))) + 0.360)));
-        }
-      }
-      break;
-
-    case MQ9:
-      //Serial.print(F("calculating mq9 gases"));
-               Serial.print("rs_ro_ratio:  ");                                                        //debug statements that display step by step calculation of ppm
-               Serial.println(rs_ro_ratio);
-      if ( accuracy == 1 ) {
-        if ( gas_id == GAS_LPG && rs_ro_ratio<=2.06 && rs_ro_ratio>=0.33) {
-          return (pow(10, ((-2.132 * (log10(rs_ro_ratio))) + 2.992)));
-        } 
-        else if ( gas_id == GAS_CARBON_MONOXIDE && rs_ro_ratio<=1.64 && rs_ro_ratio>=0.78) {
-          return (pow(10, ((-2.199 * (log10(rs_ro_ratio))) + 2.766 )));
-        } 
-        else if ( gas_id == GAS_METHANE && rs_ro_ratio<=3.12 && rs_ro_ratio>=0.70) {
-          return (pow(10, (-0.670 * pow((log10(rs_ro_ratio)), 2) - 2.399 * (log10(rs_ro_ratio)) + 3.650)));
         }
       }
       break;
@@ -206,22 +158,6 @@ float Gassensors::rs_ro_ratio(uint8_t pin)
       return MQRead(pin) / _Rovalues[0];
       break;
 
-    case MQ3:
-      return MQRead(pin) / _Rovalues[1];
-      break;
-
-    case MQ4:
-      /*{
-      Serial.print("rs_ro4_ratio now");
-      float x = MQRead(pin)/_Ro4;
-      Serial.print(x);}*/
-      return MQRead(pin) / _Rovalues[2];
-      break;
-
-    case MQ5:
-      return MQRead(pin) / _Rovalues[3];
-      break;
-
     case MQ6:
       return MQRead(pin) / _Rovalues[4];
       break;
@@ -232,10 +168,6 @@ float Gassensors::rs_ro_ratio(uint8_t pin)
 
     case MQ8:
       return MQRead(pin) / _Rovalues[6];
-      break;
-
-    case MQ9:
-      return MQRead(pin) / _Rovalues[7];
       break;
 
     case MQ135:
@@ -264,36 +196,6 @@ float Gassensors::rs_ro_ratio(uint8_t pin)
         Serial.print(F("SMOKE:"));
         Serial.print(gasppm(_pin, _type, mq2gases[5]));
         Serial.print( F(" PPM") );
-        Serial.print(F("    "));
-        Serial.print(F("\n"));}
-        break;
-
-        case MQ3:
-        {int mq3gases[] = {4,7,2,8,1,3};
-        Serial.println(F("MQSENSOR 3 output"));
-        Serial.print(F("ALCOHOL:"));
-        Serial.print(gasppm(_pin, _type, mq3gases[0]));
-        Serial.print(F( " mg/L" ));
-        Serial.print(F("    "));
-        Serial.print(F("\n"));}
-        break;
-
-      case MQ4:
-        {int mq4gases[] = {1,2,0,3,4,5};
-        Serial.println(F("MQSENSOR 4 output"));
-        Serial.print(F("METHANE:"));
-        Serial.print(gasppm(_pin, _type, mq4gases[1]));
-        Serial.print(F( " PPM" ));
-        Serial.print(F("    "));
-        Serial.print(F("\n"));}
-        break;
-
-        case MQ5:
-        {int mq5gases[] = {0,1,2,3,4};
-        Serial.println(F("MQSENSOR 5 output"));
-        Serial.print(F("LPG:"));
-        Serial.print(gasppm(_pin, _type, mq5gases[1]));
-        Serial.print(F( " PPM" ));
         Serial.print(F("    "));
         Serial.print(F("\n"));}
         break;
