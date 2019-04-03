@@ -1,16 +1,15 @@
 #include "Gassensors.h"
 #include "DHT.h"
+#include<DHT_U.h>
+#include<Adafruit_Sensor.h>
 
-#define         DHTPIN                       (48)
-#define         MQ2PIN                       (2)   //define which analog input channel you are going to use
-#define         MQ3PIN                       (3)
-#define         MQ4PIN                       (4)
-#define         MQ5PIN                       (5)
-#define         MQ6PIN                       (6)
-#define         MQ7PIN                       (7)
-#define         MQ8PIN                       (8)
-#define         MQ9PIN                       (9)
-#define         MQ135PIN                     (13)
+
+#define         DHTPIN                       (2)
+#define         MQ2PIN                       (1)  //define which analog input channel you are going to use
+#define         MQ6PIN                       (2)
+#define         MQ7PIN                       (3)
+#define         MQ8PIN                       (4)
+#define         MQ135PIN                     (0)
 
 #define         DHTTYPE                      DHT22   // DHT 22  (AM2302)    
 int Gassensor_type[] = {MQ2,MQ3,MQ4,MQ5,MQ6,MQ7,MQ8,MQ9,MQ135};
@@ -18,9 +17,6 @@ float               Ro = 0, Pm25 = 0, Pm10 = 0;                    //Ro is initi
 
 DHT dht(DHTPIN, DHTTYPE);
 Gassensors gs2(MQ2PIN,Gassensor_type[0]);
-Gassensors gs3(MQ3PIN,Gassensor_type[1]);
-Gassensors gs4(MQ4PIN,Gassensor_type[2]);
-Gassensors gs5(MQ5PIN,Gassensor_type[3]);
 Gassensors gs6(MQ6PIN,Gassensor_type[4]);
 Gassensors gs7(MQ7PIN,Gassensor_type[5]);
 Gassensors gs8(MQ8PIN,Gassensor_type[6]);
@@ -83,16 +79,6 @@ void loop() {
   Serial.print(t);
   Serial.println(F(" *C\t "));
 
-/****************** SDS011 Dust sensor code ****************************************/
-
-  PM_CAL();
-  Serial.println(F("SDS011 sensor output "));
-  Serial.print(F("PM25:"));
-  Serial.print(Pm25);
-  Serial.print(F(" ug/m3 "));
-  Serial.print(F(" PM10:"));
-  Serial.print(Pm10);
-  Serial.println(F(" ug/m3 "));
   
 /****************** MQ Gas sensors code ****************************************/
 
@@ -108,55 +94,9 @@ void loop() {
   //delay(200);
   gs7.printallgases(Gassensor_type[5]);
   //delay(200);
-  gs8.printallgases(Gassensor_type[6]);
+ //s8.printallgases(Gassensor_type[6]);
   //delay(200);
   /*gs135.printallgases(Gassensor_type[8]);
   //delay(200);*/
 }
 
-void PM_CAL()
-{
-  uint8_t mData = 0, i = 0,  mCheck = 0;
-  float mPkt[10] = {0};
-  
- while (Serial.available() > 0) 
-  {  
-    // from www.inovafitness.com
-    // packet format: AA C0 PM25_Low PM25_High PM10_Low PM10_High 0 0 CRC AB
-     mData = Serial.read();     delay(2);//wait until packet is received
-    if(mData == 0xAA)//head1 ok
-     {
-        mPkt[0] =  mData;
-        mData = Serial.read();
-        if(mData == 0xc0)//head2 ok
-        {
-          mPkt[1] =  mData;
-          mCheck = 0;
-          for(i=0;i < 6;i++)//data recv and crc calc
-          {
-             mPkt[i+2] = Serial.read();
-             delay(2);
-             mCheck += mPkt[i+2];
-          }
-          mPkt[8] = Serial.read();
-          delay(1);
-          mPkt[9] = Serial.read();
-          if(mCheck == mPkt[8])//crc ok
-          {
-            Serial.flush();
-            //Serial.write(mPkt,10);
-
-            Pm25 = (mPkt[2] + (mPkt[3]*256))/10;
-            Pm10 = (mPkt[4] + (mPkt[5]*256))/10;
-              
-            if(Pm25 > 999)
-             Pm25 = 999;
-            if(Pm10 > 999)
-             Pm10 = 999;            
-            //get one good packet
-             return;
-          }
-        }      
-     }
-   } 
-}
