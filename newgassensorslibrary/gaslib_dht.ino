@@ -20,7 +20,7 @@ Gassensors gs2(MQ2PIN,Gassensor_type[0]);
 Gassensors gs6(MQ6PIN,Gassensor_type[4]);
 Gassensors gs7(MQ7PIN,Gassensor_type[5]);
 Gassensors gs8(MQ8PIN,Gassensor_type[6]);
-Gassensors gs9(MQ9PIN,Gassensor_type[7]);
+//Gassensors gs9(MQ9PIN,Gassensor_type[7]);
 Gassensors gs135(MQ135PIN,Gassensor_type[8]);
 
 void setup() {
@@ -84,19 +84,19 @@ void loop() {
 
  gs2.printallgases(Gassensor_type[0]);
   //delay(200);
-  gs3.printallgases(Gassensor_type[1]);
+ // gs3.printallgases(Gassensor_type[1]);
   //delay(200);
-  gs4.printallgases(Gassensor_type[2]);
+  //gs4.printallgases(Gassensor_type[2]);
   //delay(200);
-  gs5.printallgases(Gassensor_type[3]);
+  //gs5.printallgases(Gassensor_type[3]);
   //delay(200);
   gs6.printallgases(Gassensor_type[4]);
   //delay(200);
   gs7.printallgases(Gassensor_type[5]);
   //delay(200);
- //s8.printallgases(Gassensor_type[6]);
+ s8.printallgases(Gassensor_type[6]);
   //delay(200);
-  /*gs135.printallgases(Gassensor_type[8]);
+  gs135.printallgases(Gassensor_type[8]);
   //delay(200);*/
 }
 
